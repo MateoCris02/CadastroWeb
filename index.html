@@ -89,10 +89,7 @@
       transition-delay: 0.5s;
     }
 
-    .item:hover .item-text {
-      opacity: 1;
-      transform: translateY(0);
-    }
+     
 
     .item-text h2 {
       font-size: 4rem;
@@ -110,24 +107,7 @@
       transition: transform 0.5s, text-shadow 0.5s;
     }
 
-    .item:hover .item-text h2,
-    .item:hover .item-text p {
-      transform: translateZ(10px) rotateX(10deg) rotateY(10deg);
-      text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
-    }
-
-    .item-text button {
-      font-size: 1.5rem;
-      margin: 4px;
-      padding: 6px 12px;
-      border-radius: 30px;
-      background: transparent;
-      color: var(--text-color);
-      border: 2px solid var(--text-color);
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s, transform 0.5s, text-shadow 0.5s;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    }
+    
 
     .item-text button:hover,
     .item-text button:focus {
@@ -367,22 +347,25 @@
       }
     }
     .top-button {
-            
-        display: inline-block;
-            padding: 10px 20px;
-            background-color: #4817b9; /* Color de fondo del botón */
-            color: white; /* Color del texto del botón */
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1000; 
-        }
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #050377; /* Color de fondo del botón */
+    border-color: #f8f9fa;
+    color: white; /* Color del texto del botón */
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+    right: 0;
+    margin-left: auto;
+    z-index: 1000;   
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
+}
+
   </style>
 
 </head>
