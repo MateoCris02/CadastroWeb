@@ -1,462 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="exo.ico">
-  <title>Cadastro-Exo</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Fondo con Remove.bg</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="cw.png" alt="Logo de la empresa" class="logo">
+        <h2>CADASTRO WEB</h2>
+        <a href="https://mateocris02.github.io/CadastroWeb/" class="volver">Volver</a>
+    </header>
+    <div class="flex-container">
+        <div class="container">
+            <h1>Eliminar Fondo de Imagen</h1>
+            <form id="uploadForm">
+                <input type="file" id="fileInput" accept="image/*" required>
+                <button type="submit">Eliminar Fondo</button>
+            </form>
+            <div id="loadingMessage" class="loading-message">Cargando...</div>
+            <div class="result" id="resultContainer">
+                <!-- Aquí se mostrará la imagen resultante y el botón de descarga -->
+            </div>
+        </div>
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      border-radius: 20px;
-    }
+        <div id="contenedor">
+            <h1>Sorteo de códigos</h1>
+            <textarea id="nombres" placeholder="Ingresa los nombres separados por comas"></textarea>
+            <br>
+            <button onclick="realizarSorteo()">Realizar Sorteo</button>
+            <div id="resultado"></div>
+        </div>
 
-    :root {
-      --background-color: #f8f9fa;
-      --text-color: #333;
-      --transition-duration: 0.5s;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: var(--background-color);
-    }
-
-    .container {
-      display: flex;
-      gap: 20px;
-      margin-top: 20px;
-      /* Ajusta el margen según sea necesario */
-    }
-
-    .item {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .item::after {
-      content: '';
-      display: block;
-      background-color: var(--background-color);
-      opacity: 0.8;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      transform: scale(2) translate(-65%, -65%) rotate(45deg);
-      transition: transform var(--transition-duration) ease-in-out;
-    }
-
-    .item:hover::after {
-      transform: scale(2) translate(0, 0) rotate(45deg);
-    }
-
-    .item-image img {
-      width: 100%;
-      height: auto;
-      max-width: 350px;
-      object-fit: cover;
-      transition: transform 1s ease;
-    }
-
-    .item:hover .item-image img {
-      transform: scale(1.2);
-    }
-
-    .item-text {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      text-align: center;
-      z-index: 1;
-      opacity: 0;
-      color: var(--text-color);
-      transform: translateY(-30px);
-      transition: opacity 2s ease, transform 1s ease;
-      transition-delay: 0.5s;
-    }
-
-     
-
-    .item-text h2 {
-      font-size: 4rem;
-      letter-spacing: 3px;
-      margin: 5px;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      transition: transform 0.5s, text-shadow 0.5s;
-    }
-
-    .item-text p {
-      font-size: 2.5rem;
-      letter-spacing: 3px;
-      margin: 10px;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      transition: transform 0.5s, text-shadow 0.5s;
-    }
-
+        <div class="container">
+            <h1>Traductor Automático</h1>
+            <textarea id="inputText" placeholder="Introduce el texto aquí..." oninput="translateText()"></textarea>
+            <div class="language-options">
+                <select id="languageSelect" onchange="translateText()">
+                    <option value="es">Español</option>
+                    <option value="en">Inglés</option>
+                    <option value="pt">Portugués</option>
+                </select>
+            </div>
+            <textarea id="translatedText" placeholder="El texto traducido aparecerá aquí..." readonly></textarea>
+        </div>
+    </div>
+    <div class="sticky-buttons">
+        <!-- Botón para abrir ChatGPT -->
+        <button class="popup-button" onclick="openChatGPT()">Chat con GPT</button>
+       </button>
+    </div>
     
 
-    .item-text button:hover,
-    .item-text button:focus {
-      background: var(--text-color);
-      color: var(--background-color);
-      outline: none;
-      transform: translateZ(10px) rotateX(10deg) rotateY(10deg);
-      text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.4);
-    }
 
-    .container2 {
-      width: 100%;
-      height: 0;
-      position: relative;
-      padding-bottom: 25%;
-    }
-
-    .container2 iframe {
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      overflow: hidden;
-      border: 0;
-      
-    }
-
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;800&display=swap");
-
-    @mixin mQ($rem) {
-      @media screen and (min-width: $rem) {
-        @content;
-      }
-    }
-
-    $position: -0.375rem;
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #171717;
-      min-height: 100vh;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    ul {
-      list-style-type: none;
-
-      i {
-        color: #fff;
-        font-size: clamp(0.9rem, 0.825rem + 0.3vw, 1.2rem);
-
-        &:hover {
-          color: #f2709c;
-        }
-      }
-    }
-
-    section {
-      font-family: "Poppins", sans-serif;
-      font-weight: 300;
-      font-style: normal;
-      padding-block: min(20vh, 6rem);
-      text-align: center;
-      width: calc(min(90rem, 90%));
-      margin-inline: auto;
-
-      span,
-      p,
-      h2,
-      h3 {
-        letter-spacing: 0.035rem;
-      }
-
-      p {
-        line-height: 1.6;
-        color: #a3a3a3;
-        max-width: 50rem;
-        margin: 0 auto;
-        font-size: clamp(0.9rem, 0.825rem + 0.3vw, 1.2rem);
-      }
-
-      .bg-watermark {
-        color: #1f1f1f;
-        font-size: clamp(6rem, 1.3333rem + 14.9333vw, 20rem);
-        font-weight: 800;
-        position: absolute;
-        z-index: -1;
-        left: 50%;
-        transform: translatex(-50%) translatey(-15%);
-        user-select: none;
-        letter-spacing: 0.5rem;
-      }
-
-      span {
-        text-transform: uppercase;
-        display: block;
-        font-size: 1.2rem;
-        color: #a3a3a3;
-      }
-
-      h2 {
-        font-size: clamp(3.5rem, 3rem + 1.6vw, 5rem);
-        margin-top: -0.625rem;
-        color: #fff;
-      }
-
-      .cards {
-        margin-top: 7rem;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
-        gap: 2rem;
-
-        @include mQ(51rem) {
-          gap: 0;
-          padding-bottom: 2.5rem;
-        }
-
-        .card {
-          position: relative;
-          cursor: pointer;
-
-          h3,
-          p {
-            text-transform: capitalize;
-          }
-
-          h3 {
-            font-size: clamp(1rem, 0.9167rem + 0.2667vw, 1.25rem);
-            font-weight: 400;
-            color: #f6f6f6;
-          }
-
-          p {
-            font-size: clamp(0.85rem, 0.75rem + 0.32vw, 1.15rem);
-            letter-spacing: 0.12rem;
-            font-weight: 300;
-            max-width: 100%;
-          }
-
-          &::before {
-            position: absolute;
-            content: "";
-            width: 5rem;
-            height: 6.25rem;
-            z-index: 0;
-            transition: 0.3s ease-in-out;
-            background: #f2709c;
-            background: -webkit-linear-gradient(to left, #ff9472, #f2709c);
-            background: linear-gradient(to left, #2d049c, #026583);
-            top: $position;
-            left: $position;
-          }
-
-          &::after {
-            position: absolute;
-            inset: 0;
-            content: "";
-            width: 100%;
-            height: 100%;
-            background: #232526;
-            background: -webkit-linear-gradient(to bottom,
-                hsl(210deg 2.99% 26.27% / 20%),
-                hsl(0deg 0% 3.14% / 90%));
-            background: linear-gradient(to bottom,
-                hsl(210deg 2.99% 26.27% / 20%),
-                hsl(0deg 0% 3.14% / 90%));
-          }
-
-          img {
-            filter: grayscale(10%);
-            transition: 0.5s ease;
-          }
-
-          &-content {
-            position: absolute;
-            bottom: 0;
-            z-index: 99;
-            left: 0;
-            color: #fff;
-            width: 100%;
-            padding: 1.875rem 1.25rem;
-            text-align: center;
-
-            ul {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              gap: 0.625rem;
-              margin-top: 1.25rem;
+    <script src="script.js"></script>
+    <script>
+        function realizarSorteo() {
+            const nombresTexto = document.getElementById('nombres').value;
+            const nombresArray = nombresTexto.split(',').map(nombre => nombre.trim());
+            if (nombresArray.length > 1) {
+                const nombreGanador = nombresArray[Math.floor(Math.random() * nombresArray.length)];
+                document.getElementById('resultado').innerText = `El ganador es: ${nombreGanador}`;
+            } else {
+                document.getElementById('resultado').innerText = 'Por favor, ingresa al menos dos nombres.';
             }
-          }
-
-          &:hover img {
-            filter: grayscale(0%);
-          }
-
-          &:hover::before {
-            transform: scale(1.03);
-          }
         }
 
-        .card:nth-child(1) {
-          &::before {
-            top: $position;
-            left: $position;
-          }
+        function splitText(text, maxLength) {
+            const parts = [];
+            let start = 0;
+            while (start < text.length) {
+                let end = start + maxLength;
+                if (end > text.length) end = text.length;
+                parts.push(text.substring(start, end));
+                start = end;
+            }
+            return parts;
         }
 
-        .card:nth-child(2) {
-          @include mQ(31.25rem) {
-            transform: translatey(15%);
-          }
-
-          &::before {
-            bottom: $position;
-            left: $position;
-            top: auto;
-          }
-        }
-
-        .card:nth-child(3) {
-          &::before {
-            top: $position;
-            left: $position;
-          }
-        }
-      }
-    }
-    .top-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #050377; /* Color de fondo del botón */
-    border-color: #f8f9fa;
-    color: white; /* Color del texto del botón */
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 10px;
-    right: 0;
-    margin-left: auto;
-    z-index: 1000;   
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
-}
-
-  </style>
-
-</head>
-
-<body>
-    <a href="servicios.html" class="top-button">Servicios</a>
-  <div class="container2">
-    <div class="container2">
-      <iframe
-        src="https://www.tickcounter.com/widget/countup/369878"
-                title="Dias Sin Error de Cadastro">
-      </iframe>
-    </div>
-    <section>
-      
-      <h2>CADASTRO WEB</h2>
-      <p> Gestionamos y actualizamos tus productos con facilidad: Mantenemos nuestra plataforma siempre al día para ofrecer la mejor experiencia a nuestros clientes</p>
-      <span class="bg-watermark">team</span>
-      <div class="cards">
-        <div class="card">
-          <img src="Diseño_sin_título__2_-removebg-preview.png" alt="Gabi">
-          <div class="card-content">
-            <h3>Gabriela Da Silva</h3>
-            <p>Cadastradora</p>
-            <ul>
-              <li><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-              <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="card">
-          <img src="Diseño_sin_título-removebg-preview.png " alt="Manu">
-          <div class="card-content">
-            <h3>Adriana Figueredo </h3>
-            <p>Cadastradora</p>
-            <ul>
-              <li><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-              <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="card">
-          <img src=" Diseño_sin_título__1_-removebg-preview.png " alt="Adri">
-          <div class="card-content">
-            <h3>Emanuel Gonzalez</h3>
-            <p>Gerente Cadastro</p>
-            <ul>
-              <li><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-              <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="card">
-          <img src="Diseño_sin_título__3_-removebg-preview.png" alt="Lix">
-          <div class="card-content">
-            <h3>Liz Romero</h3>
-            <p>Cadastradora</p>
-            <ul>
-              <li><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-              <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="card">
-          <img src="Diseño_sin_título__4_-removebg-preview.png" alt="ER">
-          <div class="card-content">
-            <h3>Hernán Sosa</h3>
-            <p>Cadastrador</p>
-            <ul>
-              <li><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-              <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
-            </ul>
+        function translateText() {
+            const inputText = document.getElementById('inputText').value;
+            const targetLang = document.getElementById('languageSelect').value;
             
-          </div>
-          
-        </div>
-        <div class="card">
-          <img src="Diseño_sin_título__5_-removebg-preview.png" alt="Lix">
-          <div class="card-content">
-            <h3>Mateo Cristaldo</h3>
-            <p>Cadastrador</p>
-            <ul>
-              <li><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-              <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
-            </ul>
-          </div>
-        </div>
-        
-      </div>
-    </section>
-    <div style="left:0; width:100%; height:50px; position:relative; padding-bottom:0; margin:0 auto"><iframe src="https://www.tickcounter.com/widget/countup/369881" style="top:0; left:0; width:100%; height:100%; position:absolute; border:0; overflow:hidden" title=","></iframe></div>
-</body>
+            if (inputText.trim() === '') {
+                document.getElementById('translatedText').value = '';
+                return;
+            }
+            
+            const maxLength = 500; // Maximum length for each part
+            const textParts = splitText(inputText, maxLength);
+            let translatedParts = [];
+            
+            const promises = textParts.map(part => {
+                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(part)}`;
+                return fetch(url)
+                    .then(response => response.json())
+                    .then(data => translatedParts.push(data[0][0][0]))
+                    .catch(error => {
+                        console.error('Error al traducir:', error);
+                        translatedParts.push('Error al traducir esta parte. Inténtalo de nuevo.');
+                    });
+            });
 
+            Promise.all(promises).then(() => {
+                document.getElementById('translatedText').value = translatedParts.join(' ');
+            });
+        }
+    </script>
+</body>
 </html>
